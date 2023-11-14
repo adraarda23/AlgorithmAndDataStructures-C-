@@ -15,7 +15,7 @@ struct Ogrenci {
 
 struct Ogrenci* createDoublyLinkedList(int lengthOfLinkedList, int ogrenciNo[], char* ad[], char* soyAd[], char* bolum[], int sinif[]) {
     if (lengthOfLinkedList <= 0) {
-        printf("lengthOfLinkedList cannot be a negative or zero number");
+        printf("\nlengthOfLinkedList cannot be a negative or zero number");
         return NULL;
     }
 
@@ -55,7 +55,7 @@ void destroyLinkedList(struct Ogrenci* firstAddressOfList) {
 
         free(tempAddress);
     }
-    printf("Linked List deleted!\n");
+    printf("\nLinked List deleted!\n");
 }
 
 
@@ -70,7 +70,7 @@ struct Ogrenci* addNode(int indexNumber, struct Ogrenci* firstAddressOfList, int
     // Duplicacy check
     while (checkDuplicates != NULL) {
         if (checkDuplicates->ogrenciNo == ogrenciNo) {
-            printf("ogrenciNo is a PRIMARY KEY! %d already taken\n", ogrenciNo);
+            printf("\nogrenciNo is a PRIMARY KEY! %d already taken\n", ogrenciNo);
             controlFlag = false;
             free(node);
             break;
@@ -83,7 +83,7 @@ struct Ogrenci* addNode(int indexNumber, struct Ogrenci* firstAddressOfList, int
         indexNumber = lengthOfLinkedList;
         
     if (indexNumber < 0) {
-        printf("This method cannot take negative index values\n");
+        printf("\nThis method cannot take negative index values\n");
         controlFlag = false;
     } else {
         if (indexNumber == 0) {
@@ -131,14 +131,14 @@ struct Ogrenci* addNode(int indexNumber, struct Ogrenci* firstAddressOfList, int
 
 struct Ogrenci* deleteNode(int ogrenciNo, struct Ogrenci* firstAddressOfList) {
     if (firstAddressOfList == NULL) {
-        printf("List is not exist.\n");
+        printf("\nList is not exist.\n");
         return firstAddressOfList;
     }
 
     if (firstAddressOfList->ogrenciNo == ogrenciNo) {
         struct Ogrenci* temp = firstAddressOfList;
         firstAddressOfList = firstAddressOfList->out;
-        printf("No: %d, %s %s is deleted\n", temp->ogrenciNo, temp->ad, temp->soyAd);
+        printf("\nNo: %d, %s %s is deleted\n", temp->ogrenciNo, temp->ad, temp->soyAd);
         free(temp);
         return firstAddressOfList;
     }
@@ -149,14 +149,14 @@ struct Ogrenci* deleteNode(int ogrenciNo, struct Ogrenci* firstAddressOfList) {
     }
 
     if (current->out == NULL) {
-        printf("Node with ogrenciNo: %d not found.\n", ogrenciNo);
+        printf("\nNode with ogrenciNo: %d not found.\n", ogrenciNo);
         return firstAddressOfList;
     }
     
     struct Ogrenci* temp = current->out;
     current->out = temp->out; //current->out changed to current->out->out (skipped one node)
 
-    printf("No: %d, %s %s is deleted\n", temp->ogrenciNo, temp->ad, temp->soyAd);
+    printf("\nNo: %d, %s %s is deleted\n", temp->ogrenciNo, temp->ad, temp->soyAd);
     free(temp);
 
     return firstAddressOfList;
@@ -170,7 +170,7 @@ struct Ogrenci* searchNode(int ogrenciNo , struct  Ogrenci* firstAddressOfList){
         }
         firstAddressOfList = firstAddressOfList->out;
     }
-    printf("Ogrenci not found\n");
+    printf("\nOgrenci not found\n");
     return firstAddressOfList;
 }
 void displayLinkedList(struct Ogrenci* firstAddressOfList) {
@@ -180,7 +180,7 @@ void displayLinkedList(struct Ogrenci* firstAddressOfList) {
     }
 
     while (firstAddressOfList != NULL) {
-        printf("ogrenciNo: %d, Ad: %s, Soyad: %s, Bolum: %s, Sinif: %d\n",
+        printf("\nogrenciNo: %d, Ad: %s, Soyad: %s, Bolum: %s, Sinif: %d\n",
                firstAddressOfList->ogrenciNo, firstAddressOfList->ad, firstAddressOfList->soyAd, firstAddressOfList->bolum, firstAddressOfList->sinif);
 
         firstAddressOfList = firstAddressOfList->out;
@@ -189,25 +189,76 @@ void displayLinkedList(struct Ogrenci* firstAddressOfList) {
 
 
 //return int because I dont want to get a compile warning
-int main() { 
+int main() {
+    int ogrenciNo[] = {1, 2, 3};
+    char *ad[] = {"Ali", "veli", "deli"};
+    char *soyAd[] = {"Yilmaz", "yilar", "yildi"};
+    char *bolum[] = {"Bilgisayar Muhendisligi", "bm", "qcte"};
+    int sinif[] = {2, 1, 3};
 
-    int ogrenciNo[] = {1,2,3};
-    char* ad[] = {"Ali","veli","deli"};
-    char* soyAd[] = {"Yilmaz","yilar","yildi"};
-    char* bolum[] = {"Bilgisayar Muhendisligi","bm","qcte"};
-    int sinif[] = {2,1,3};
+    struct Ogrenci *head = createDoublyLinkedList(3, ogrenciNo, ad, soyAd, bolum, sinif);
 
-    struct Ogrenci* head = createDoublyLinkedList(3, ogrenciNo, ad, soyAd, bolum, sinif);
-  
-    
-    head=addNode(0, head, 4, "Arda", "Kilinc", "Bilgisayar", 2);
-    head=addNode(8, head, 5, "Arda", "Kilinc", "Bilgisayar", 2);
-    struct Ogrenci* searchedNode = searchNode(2,head);
-     printf("%d %s %s %s %d \n",searchedNode->ogrenciNo,searchedNode->ad,searchedNode->soyAd,searchedNode->bolum,searchedNode->sinif);
-    //head = deleteNode(1, head);
-    displayLinkedList(searchedNode);
-    destroyLinkedList(searchedNode);
-    
+    int choice;
+    int index;
+    int newOgrenciNo;
+    char newAd[100];
+    char newSoyAd[100];
+    char newBolum[100];
+    int newSinif;
+
+    while (1) {
+        printf("\n--- MENU ---\n");
+        printf("1. Add Node\n");
+        printf("2. Search Node\n");
+        printf("3. Delete Node\n");
+        printf("4. Display Linked List\n");
+        printf("5. Exit\n");
+        printf("Enter your choice: \n");
+        scanf("%d", &choice);
+
+        switch (choice) {
+            case 1:
+                printf("Enter index to add: ");
+                scanf("%d", &index);
+                printf("Enter new data:\n");
+                printf("Ogrenci No: ");
+                scanf("%d", &newOgrenciNo);
+                printf("Ad: ");
+                scanf("%s", newAd);
+                printf("Soyad: ");
+                scanf("%s", newSoyAd);
+                printf("Bolum: ");
+                scanf("%s", newBolum);
+                printf("Sinif: ");
+                scanf("%d", &newSinif);
+                head = addNode(index, head, newOgrenciNo, newAd, newSoyAd, newBolum, newSinif);
+                break;
+            case 2:
+                printf("Enter Ogrenci No to search: ");
+                scanf("%d", &newOgrenciNo);
+                struct Ogrenci *searchedNode = searchNode(newOgrenciNo, head);
+                if (searchedNode != NULL) {
+                    printf("\nFound Node: %d %s %s %s %d\n", searchedNode->ogrenciNo, searchedNode->ad, searchedNode->soyAd, searchedNode->bolum, searchedNode->sinif);
+                } else {
+                    printf("\nNode not found.\n");
+                }
+                break;
+            case 3:
+                printf("Enter Ogrenci No to delete: ");
+                scanf("%d", &newOgrenciNo);
+                head = deleteNode(newOgrenciNo, head);
+                break;
+            case 4:
+                displayLinkedList(head);
+                break;
+            case 5:
+                destroyLinkedList(head);
+                exit(0);
+            default:
+                printf("Invalid choice. Please enter a valid option.\n");
+        }
+    }
+
     return 0;
 }
 
