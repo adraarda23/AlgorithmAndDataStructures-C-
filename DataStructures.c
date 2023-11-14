@@ -25,9 +25,9 @@ struct Ogrenci* createDoublyLinkedList(int lengthOfLinkedList, int ogrenciNo[], 
     for (int i = 0; i < lengthOfLinkedList; i++) {
         struct Ogrenci* node = (struct Ogrenci*)malloc(sizeof(struct Ogrenci));
         node->ogrenciNo = ogrenciNo[i];
-        node->ad = ad[i];
-        node->soyAd = soyAd[i];
-        node->bolum = bolum[i];
+        node->ad = strdup(ad[i]);        
+        node->soyAd = strdup(soyAd[i]);  
+        node->bolum = strdup(bolum[i]);  
         node->sinif = sinif[i];
         node->in = NULL;
         node->out = NULL;
@@ -43,6 +43,7 @@ struct Ogrenci* createDoublyLinkedList(int lengthOfLinkedList, int ogrenciNo[], 
     }
     return head;
 }
+
 
 void destroyLinkedList(struct Ogrenci* firstAddressOfList) {
     while (firstAddressOfList != NULL) {
@@ -67,7 +68,6 @@ struct Ogrenci* addNode(int indexNumber, struct Ogrenci* firstAddressOfList, int
     struct Ogrenci* nonZeroIndexAddress = firstAddressOfList;
     int lengthOfLinkedList = 0;
 
-    // Duplicacy check
     while (checkDuplicates != NULL) {
         if (checkDuplicates->ogrenciNo == ogrenciNo) {
             printf("\nogrenciNo is a PRIMARY KEY! %d already taken\n", ogrenciNo);
@@ -86,7 +86,8 @@ struct Ogrenci* addNode(int indexNumber, struct Ogrenci* firstAddressOfList, int
         printf("\nThis method cannot take negative index values\n");
         controlFlag = false;
     } else {
-        if (indexNumber == 0) {
+        if (indexNumber == 0 && controlFlag) {
+            // Eğer index 0 ise, yeni oluşturulan düğümü başlangıç adresi olarak döndür
             node->ogrenciNo = ogrenciNo;
             node->ad = malloc(strlen(ad) + 1);
             strcpy(node->ad, ad);
@@ -95,8 +96,14 @@ struct Ogrenci* addNode(int indexNumber, struct Ogrenci* firstAddressOfList, int
             node->bolum = malloc(strlen(bolum) + 1); 
             strcpy(node->bolum, bolum);
             node->sinif = sinif;
+            node->in = NULL;
             node->out = firstAddressOfList;
-            firstAddressOfList->in = node; 
+
+            // Eğer linked list boşsa, yeni oluşturulan düğümü başlangıç adresi olarak döndür
+            if (firstAddressOfList != NULL) {
+                firstAddressOfList->in = node;
+            }
+
             return node;
         } else {
             while (indexNumber - 1 != counter && firstAddressOfList != NULL) {
@@ -129,6 +136,8 @@ struct Ogrenci* addNode(int indexNumber, struct Ogrenci* firstAddressOfList, int
 }
 
 
+
+
 struct Ogrenci* deleteNode(int ogrenciNo, struct Ogrenci* firstAddressOfList) {
     if (firstAddressOfList == NULL) {
         printf("\nList is not exist.\n");
@@ -139,6 +148,7 @@ struct Ogrenci* deleteNode(int ogrenciNo, struct Ogrenci* firstAddressOfList) {
         struct Ogrenci* temp = firstAddressOfList;
         firstAddressOfList = firstAddressOfList->out;
         printf("\nNo: %d, %s %s is deleted\n", temp->ogrenciNo, temp->ad, temp->soyAd);
+        
         free(temp);
         return firstAddressOfList;
     }
@@ -249,7 +259,11 @@ int main() {
                 head = deleteNode(newOgrenciNo, head);
                 break;
             case 4:
-                displayLinkedList(head);
+                if (head == NULL) {
+                    printf("Linked List is empty.\n");
+                } else {
+                    displayLinkedList(head);
+                }
                 break;
             case 5:
                 destroyLinkedList(head);
