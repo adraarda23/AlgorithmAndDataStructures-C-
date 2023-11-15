@@ -59,7 +59,7 @@ void destroyLinkedList(struct Ogrenci* firstAddressOfList) {
     printf("\nLinked List deleted!\n");
 }
 
-
+//Hard DRY ._. || One function 3 different usage
 struct Ogrenci* addNode(int indexNumber, struct Ogrenci* firstAddressOfList, int ogrenciNo, char* ad, char* soyAd, char* bolum, int sinif) {
     struct Ogrenci* node = (struct Ogrenci*)malloc(sizeof(struct Ogrenci));
     int counter = 0;
@@ -272,7 +272,6 @@ int main() {
                 printf("Invalid choice. Please enter a valid option.\n");
         }
     }
-
     return 0;
 }
 
